@@ -6,6 +6,8 @@ Real-time process monitoring with CPU & memory tracking.
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
 
+![Vigil Screenshot](screenshot.png)
+
 ## Features
 
 - **Real-time Monitoring** - Track CPU and memory usage of any running process
@@ -45,7 +47,7 @@ cd vigil
 
 2. Install dependencies:
 ```bash
-npm run install:all
+npm install
 ```
 
 3. Start the development server:
@@ -53,7 +55,7 @@ npm run install:all
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173`
+The client will be available at `http://localhost:5173` and the server at `http://localhost:3001`
 
 ## Usage
 
@@ -67,19 +69,23 @@ The app will be available at `http://localhost:5173`
 
 ```
 vigil/
-├── client/          # React frontend
-│   ├── src/
-│   │   ├── components/  # UI components
-│   │   ├── hooks/       # Custom React hooks
-│   │   ├── lib/         # Utilities
-│   │   └── types/       # TypeScript types
-│   └── ...
-├── server/          # Express backend
-│   └── src/
-│       ├── server.ts        # Main server
-│       ├── monitor.ts       # Process monitoring
-│       └── sessionManager.ts # Session storage
-└── data/            # SQLite database
+├── packages/
+│   ├── client/              # React frontend (@vigil/client)
+│   │   └── src/
+│   │       ├── components/  # UI components
+│   │       ├── hooks/       # Custom React hooks
+│   │       ├── context/     # React context providers
+│   │       ├── pages/       # Page components
+│   │       ├── lib/         # Utilities
+│   │       └── types/       # TypeScript types
+│   ├── server/              # Express backend (@vigil/server)
+│   │   └── src/
+│   │       ├── server.ts        # Main server & WebSocket
+│   │       ├── monitor.ts       # Process monitoring
+│   │       ├── processScanner.ts # Process discovery
+│   │       └── sessionManager.ts # Session storage
+│   └── data/                # SQLite database
+└── package.json             # Root package with npm workspaces
 ```
 
 ## License

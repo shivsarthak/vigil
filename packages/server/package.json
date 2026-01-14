@@ -1,5 +1,5 @@
 {
-  "name": "vigil-server",
+  "name": "@vigil/server",
   "version": "1.0.0",
   "type": "module",
   "scripts": {

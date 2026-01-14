@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "description": "Real-time process monitoring with CPU & memory tracking",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "cd server && npm run dev",
-    "dev:client": "cd client && npm run dev",
-    "build": "cd client && npm run build",
-    "install:all": "npm install && cd server && npm install && cd ../client && npm install"
+    "dev:server": "npm run dev -w @vigil/server",
+    "dev:client": "npm run dev -w @vigil/client",
+    "build": "npm run build -w @vigil/client",
+    "build:server": "npm run build -w @vigil/server",
+    "lint": "npm run lint -w @vigil/client"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
