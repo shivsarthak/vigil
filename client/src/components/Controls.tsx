@@ -24,7 +24,7 @@ export function Controls({
   const [recordingTime, setRecordingTime] = useState(0);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isRecording) {
       setRecordingTime(0);
       interval = setInterval(() => {

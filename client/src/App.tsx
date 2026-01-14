@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { ProcessList } from '@/components/ProcessList';
 import { Controls } from '@/components/Controls';
 import { Timeline } from '@/components/Timeline';
-import { SessionList } from '@/components/SessionList';
 import { useWebSocket } from '@/hooks/useWebSocket';
+import { useTheme } from '@/context/ThemeContext';
 import { formatBytes, formatCpu } from '@/lib/utils';
-import { Activity, Cpu, HardDrive, AlertCircle, X, TrendingUp, TrendingDown } from 'lucide-react';
-import type { ProcessInfo, DataPoint, SessionWithData } from '@/types';
+import { Activity, Cpu, HardDrive, AlertCircle, X, TrendingUp, TrendingDown, History, Sun, Moon } from 'lucide-react';
+import type { ProcessInfo, DataPoint } from '@/types';
 import { cn } from '@/lib/utils';
 
 function App() {
@@ -15,32 +17,21 @@ function App() {
     isConnected,
     startMonitoring,
     stopMonitoring,
-    currentSession,
     dataPoints,
     isRecording,
     error,
     clearError,
   } = useWebSocket();
 
+  const { theme, toggleTheme } = useTheme();
   const [selectedProcess, setSelectedProcess] = useState<ProcessInfo | null>(null);
   const [displayedDataPoints, setDisplayedDataPoints] = useState<DataPoint[]>([]);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     if (isRecording) {
       setDisplayedDataPoints(dataPoints);
     }
   }, [dataPoints, isRecording]);
-
-  useEffect(() => {
-    if (!isRecording && currentSession) {
-      setRefreshTrigger(prev => prev + 1);
-    }
-  }, [isRecording, currentSession]);
-
-  const handleSelectSession = (session: SessionWithData) => {
-    setDisplayedDataPoints(session.dataPoints);
-  };
 
   const latestDataPoint = displayedDataPoints[displayedDataPoints.length - 1];
   const prevDataPoint = displayedDataPoints[displayedDataPoints.length - 2];
@@ -71,15 +62,25 @@ function App() {
               </p>
             </div>
           </div>
-          {isRecording && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-              </span>
-              <span className="text-xs font-medium text-red-400">Recording</span>
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            {isRecording && (
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                </span>
+                <span className="text-xs font-medium text-red-400">Recording</span>
+              </div>
+            )}
+            <Link to="/history">
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <History className="h-5 w-5" />
+              </Button>
+            </Link>
+            <Button variant="ghost" size="icon" className="h-9 w-9" onClick={toggleTheme}>
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -140,22 +141,6 @@ function App() {
               </CardContent>
             </Card>
 
-            {/* Session History */}
-            <Card className="overflow-hidden">
-              <CardHeader className="pb-2 bg-secondary/30">
-                <CardTitle className="text-sm font-medium flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                  Session History
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-4">
-                <SessionList
-                  currentSessionId={currentSession?.id ?? null}
-                  onSelectSession={handleSelectSession}
-                  refreshTrigger={refreshTrigger}
-                />
-              </CardContent>
-            </Card>
           </div>
 
           {/* Main Area */}
