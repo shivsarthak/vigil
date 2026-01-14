@@ -65,7 +65,7 @@ function App() {
               <Activity className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-xl font-bold">Process Monitor</h1>
+              <h1 className="text-xl font-bold">Vigil</h1>
               <p className="text-xs text-muted-foreground">
                 Real-time CPU & Memory monitoring
               </p>

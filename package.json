@@ -1,6 +1,7 @@
 {
-  "name": "process-monitor",
+  "name": "vigil",
   "version": "1.0.0",
+  "description": "Real-time process monitoring with CPU & memory tracking",
   "private": true,
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
